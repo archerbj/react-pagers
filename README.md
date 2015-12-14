@@ -26,6 +26,9 @@ import ReactPagers from 'ReactPagers';
 | `className` | object | `className: { prev: null, next: null, last: null, first: null, container: null }` | 样式自定义 |
 
 ## 更新日志
+- v1.0.1
+  + 逻辑错误
+
 - v1.0.0
   + 基本功能
   + 本地化
