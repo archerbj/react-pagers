@@ -1,6 +1,6 @@
 {
   "name": "react-pagers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Paginator for React.JS",
   "main": "src/javascript/react-pagers.jsx",
   "scripts": {
