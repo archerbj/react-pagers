@@ -38,7 +38,8 @@ class ReactPaginator extends React.Component {
    * @return {number}          修正后的页码
    */
   active(active) {
-    return Math.min(Math.max(active, 1), this.props.total);
+    var total = Math.max(1, this.props.total);
+    return Math.min(Math.max(active, 1), total);
   }
 
   /**
@@ -65,22 +66,17 @@ class ReactPaginator extends React.Component {
         // 存储生成的页码元素
         between = [];
 
-        min = Math.max(min,     1);
-        max = Math.min(max, total);
-        
-    if ( total - active < half ) {
-      min = total - number;
-    } else if ( active <= half ) {
-      max = number + 1;
-    }
+        max = Math.max(max, number);
 
-    let unique = min;
-    
-    for (; unique <= max; unique++) {
+    total = Math.max(1, total); // 修正总页码数
+    max   = Math.min(max, total);
+    min   = Math.max(max - number + 1, 1);
+
+    for (; min <= max; min++) {
       let option = {
-        value : unique,
-        unique: unique,
-        active: active === unique // Is active.
+        value : min,
+        unique: min,
+        active: active === min // Is active.
       };
       between.push( option );
     }
@@ -117,20 +113,22 @@ class ReactPaginator extends React.Component {
         between = this.filler(active);
       }
 
+      let handChange = init ? null : this.handChange;
+
       this.setState({
         active : active,
         between: between
-      }, this.handChange);
+      }, handChange);
     }
   }
 
   componentWillMount() {
-    let { active } = this.props;
-    this.handleRedirectTo(active, true);
+    this.handleRedirectTo(this.props.active, true);
   }
 
   componentWillReceiveProps(props) {
-    this.handleRedirectTo(props.active, true);
+    this.props = props;
+    this.handleRedirectTo(this.props.active, true);
   }
 
   render() {
@@ -163,9 +161,9 @@ class ReactPaginator extends React.Component {
 }
 
 ReactPaginator.defaultProps = {
-  total: 20,
-  active: 5,
-  number: 8,
+  total: 1,
+  active: 1,
+  number: 9,
   visible: true,
   language: {
     last: "Last",
