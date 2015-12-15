@@ -104,6 +104,16 @@
 	          _react2['default'].createElement(
 	            'h3',
 	            null,
+	            '英文'
+	          ),
+	          _react2['default'].createElement(_reactPagersJsx2['default'], { onChange: this.handlePaginatorChange.bind(this) })
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'paginator-example' },
+	          _react2['default'].createElement(
+	            'h3',
+	            null,
 	            '中文'
 	          ),
 	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, language: {
@@ -111,6 +121,25 @@
 	              prev: '上一页',
 	              next: '下一页',
 	              first: "首页"
+	            }, onChange: this.handlePaginatorChange.bind(this) })
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'paginator-example' },
+	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, visible: false, language: {
+	              prev: '上一页',
+	              next: '下一页'
+	            }, onChange: this.handlePaginatorChange.bind(this) })
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'paginator-example' },
+	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, visible: false, language: {
+	              prev: '上一页',
+	              next: '下一页'
+	            }, className: {
+	              prev: 'previous',
+	              next: 'next'
 	            }, onChange: this.handlePaginatorChange.bind(this) })
 	        )
 	      );
