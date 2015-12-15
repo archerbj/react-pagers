@@ -28961,7 +28961,7 @@
 	/**
 	 * Paginator for React.JS
 	 * 
-	 * @github https://github.com/code-artisan/ReactPaginator
+	 * @github https://github.com/code-artisan/ReactPagers
 	 * @author artisan.
 	 * @Date(2015-11-16).
 	 */
@@ -29004,8 +29004,8 @@
 
 	var _reactPagersItemJsx2 = _interopRequireDefault(_reactPagersItemJsx);
 
-	var ReactPaginator = (function (_React$Component) {
-	  _inherits(ReactPaginator, _React$Component);
+	var ReactPagers = (function (_React$Component) {
+	  _inherits(ReactPagers, _React$Component);
 
 	  /**
 	   * Constructor
@@ -29014,30 +29014,34 @@
 	   * @return {undefined}
 	   */
 
-	  function ReactPaginator(props) {
-	    _classCallCheck(this, ReactPaginator);
+	  function ReactPagers(props) {
+	    _classCallCheck(this, ReactPagers);
 
-	    _get(Object.getPrototypeOf(ReactPaginator.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ReactPagers.prototype), 'constructor', this).call(this, props);
 
 	    this.state = {
+	      useHash: !!props.useHash,
 	      active: props.active || 1,
 	      between: []
 	    };
 
-	    this.displayName = 'ReactPaginator';
+	    this.matcher = /page\=([0-9]+)/;
+
+	    this.displayName = 'ReactPagers';
 	  }
 
 	  /**
-	   * 修正 active 值，比如：<ReactPaginator active={-1} /> 则需要修正
+	   * 修正 active 值，比如：<ReactPagers active={-1} /> 则需要修正
 	   * 
 	   * @param  {number} active   当前页码
 	   * @return {number}          修正后的页码
 	   */
 
-	  _createClass(ReactPaginator, [{
+	  _createClass(ReactPagers, [{
 	    key: 'active',
 	    value: function active(_active) {
-	      return Math.min(Math.max(_active, 1), this.props.total);
+	      var total = Math.max(1, this.props.total);
+	      return Math.min(Math.max(_active, 1), total);
 	    }
 
 	    /**
@@ -29065,22 +29069,17 @@
 	      // 存储生成的页码元素
 	      var between = [];
 
-	      min = Math.max(min, 1);
+	      max = Math.max(max, number);
+
+	      total = Math.max(1, total); // 修正总页码数，有可能传入0或负数
 	      max = Math.min(max, total);
+	      min = Math.max(max - number + 1, 1);
 
-	      if (total - active < half) {
-	        min = total - number;
-	      } else if (active <= half) {
-	        max = number + 1;
-	      }
-
-	      var unique = min;
-
-	      for (; unique <= max; unique++) {
+	      for (; min <= max; min++) {
 	        var option = {
-	          value: unique,
-	          unique: unique,
-	          active: active === unique // Is active.
+	          value: min,
+	          unique: min,
+	          active: active === min // Is active.
 	        };
 	        between.push(option);
 	      }
@@ -29089,7 +29088,7 @@
 	    }
 
 	    /**
-	     * 触发回调函数
+	     * 触发回调函数.
 	     * 
 	     * @return {undefined}
 	     */
@@ -29104,6 +29103,19 @@
 	    }
 
 	    /**
+	     * 获取hash中的页码.
+	     * 
+	     * @return {Number}
+	     */
+	  }, {
+	    key: 'getHashPage',
+	    value: function getHashPage() {
+	      var hash = location.hash,
+	          result = hash.match(this.matcher);
+	      return _jquery2['default'].isArray(result) ? +result[1] : 0;
+	    }
+
+	    /**
 	     * 根据 active值 跳转到相应的页码并触发回掉函数
 	     * 
 	     * @param  {number} active 当前页码
@@ -29112,6 +29124,11 @@
 	  }, {
 	    key: 'handleRedirectTo',
 	    value: function handleRedirectTo(active, init) {
+	      if (this.state.useHash) {
+	        active = this.getHashPage();
+	      }
+
+	      this.state.useHash = false;
 	      active = this.active(active);
 
 	      if (active !== this.state.active || init) {
@@ -29121,23 +29138,54 @@
 	          between = this.filler(active);
 	        }
 
+	        var handChange = init ? null : this.handChange;
+
 	        this.setState({
 	          active: active,
 	          between: between
-	        }, this.handChange);
+	        }, handChange);
 	      }
+	    }
+
+	    /**
+	     * Set location hash.
+	     * 
+	     * @param {Number} active active page.
+	     */
+	  }, {
+	    key: 'setQueryString',
+	    value: function setQueryString(active) {
+	      var hash = location.hash,
+	          result = hash.match(this.matcher);
+
+	      if (_underscore2['default'].isArray(result)) {
+	        hash = hash.replace(this.matcher, function ($0, $1) {
+	          return 'page=' + active;
+	        });
+	      } else {
+	        hash += '/page=' + active;
+	      }
+
+	      location.hash = hash;
 	    }
 	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
-	      var active = this.props.active;
-
-	      this.handleRedirectTo(active, true);
+	      this.handleRedirectTo(this.props.active, true);
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.props.useHash) {
+	        this.setQueryString(this.state.active);
+	      }
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(props) {
-	      this.handleRedirectTo(props.active, true);
+	      this.props = props;
+	      this.state.useHash = !!props.useHash;
+	      this.handleRedirectTo(this.props.active, true);
 	    }
 	  }, {
 	    key: 'render',
@@ -29173,13 +29221,14 @@
 	    }
 	  }]);
 
-	  return ReactPaginator;
+	  return ReactPagers;
 	})(_react2['default'].Component);
 
-	ReactPaginator.defaultProps = {
-	  total: 20,
-	  active: 5,
-	  number: 8,
+	ReactPagers.defaultProps = {
+	  total: 1,
+	  active: 1,
+	  number: 9,
+	  useHash: true,
 	  visible: true,
 	  language: {
 	    last: "Last",
@@ -29197,17 +29246,18 @@
 	  }
 	};
 
-	ReactPaginator.propTypes = {
+	ReactPagers.propTypes = {
 	  total: _react2['default'].PropTypes.number,
 	  active: _react2['default'].PropTypes.number,
 	  number: _react2['default'].PropTypes.number,
+	  useHash: _react2['default'].PropTypes.bool,
 	  visible: _react2['default'].PropTypes.bool,
 	  language: _react2['default'].PropTypes.object,
 	  onChange: _react2['default'].PropTypes.func,
 	  className: _react2['default'].PropTypes.object
 	};
 
-	exports['default'] = ReactPaginator;
+	exports['default'] = ReactPagers;
 	module.exports = exports['default'];
 
 /***/ },
@@ -30823,7 +30873,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Link for ReactPaginator
+	 * Link for ReactPagers
+	 * 
 	 * @author artisan.
 	 * @Date(2015-11-16).
 	 */
@@ -30856,18 +30907,18 @@
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var ReactPaginatorItem = (function (_React$Component) {
-	  _inherits(ReactPaginatorItem, _React$Component);
+	var ReactPagersItem = (function (_React$Component) {
+	  _inherits(ReactPagersItem, _React$Component);
 
-	  function ReactPaginatorItem(props) {
-	    _classCallCheck(this, ReactPaginatorItem);
+	  function ReactPagersItem(props) {
+	    _classCallCheck(this, ReactPagersItem);
 
-	    _get(Object.getPrototypeOf(ReactPaginatorItem.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ReactPagersItem.prototype), 'constructor', this).call(this, props);
 
-	    this.displayName = 'ReactPaginatorItem';
+	    this.displayName = 'ReactPagersItem';
 	  }
 
-	  _createClass(ReactPaginatorItem, [{
+	  _createClass(ReactPagersItem, [{
 	    key: 'handleClick',
 	    value: function handleClick() {
 	      // Diabled or active.
@@ -30899,10 +30950,10 @@
 	    }
 	  }]);
 
-	  return ReactPaginatorItem;
+	  return ReactPagersItem;
 	})(_react2['default'].Component);
 
-	ReactPaginatorItem.defaultProps = {
+	ReactPagersItem.defaultProps = {
 	  value: null,
 	  active: false,
 	  unique: null,
@@ -30911,7 +30962,7 @@
 	  className: null
 	};
 
-	ReactPaginatorItem.propTypes = {
+	ReactPagersItem.propTypes = {
 	  value: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.number]),
 	  active: _react2['default'].PropTypes.bool,
 	  unique: _react2['default'].PropTypes.number,
@@ -30920,7 +30971,7 @@
 	  className: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.object])
 	};
 
-	exports['default'] = ReactPaginatorItem;
+	exports['default'] = ReactPagersItem;
 	module.exports = exports['default'];
 
 /***/ }

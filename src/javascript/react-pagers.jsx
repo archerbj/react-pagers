@@ -1,7 +1,7 @@
 /**
  * Paginator for React.JS
  * 
- * @github https://github.com/code-artisan/ReactPaginator
+ * @github https://github.com/code-artisan/ReactPagers
  * @author artisan.
  * @Date(2015-11-16).
  */
@@ -10,9 +10,9 @@ import $ from 'jquery';
 import React from 'react';
 import _ from 'underscore';
 import classnames from 'classnames';
-import ReactPaginatorItem from './react-pagers-item.jsx';
+import ReactPagersItem from './react-pagers-item.jsx';
 
-class ReactPaginator extends React.Component {
+class ReactPagers extends React.Component {
 
   /**
    * Constructor
@@ -24,15 +24,18 @@ class ReactPaginator extends React.Component {
     super(props);
 
     this.state = {
+      useHash: !!props.useHash,
       active : props.active || 1,
       between: []
     };
 
-    this.displayName = 'ReactPaginator';
+    this.matcher = /page\=([0-9]+)/;
+
+    this.displayName = 'ReactPagers';
   }
 
   /**
-   * 修正 active 值，比如：<ReactPaginator active={-1} /> 则需要修正
+   * 修正 active 值，比如：<ReactPagers active={-1} /> 则需要修正
    * 
    * @param  {number} active   当前页码
    * @return {number}          修正后的页码
@@ -68,7 +71,7 @@ class ReactPaginator extends React.Component {
 
         max = Math.max(max, number);
 
-    total = Math.max(1, total); // 修正总页码数
+    total = Math.max(1, total); // 修正总页码数，有可能传入0或负数
     max   = Math.min(max, total);
     min   = Math.max(max - number + 1, 1);
 
@@ -85,7 +88,7 @@ class ReactPaginator extends React.Component {
   }
 
   /**
-   * 触发回调函数
+   * 触发回调函数.
    * 
    * @return {undefined}
    */
@@ -98,12 +101,28 @@ class ReactPaginator extends React.Component {
   }
 
   /**
+   * 获取hash中的页码.
+   * 
+   * @return {Number}
+   */
+  getHashPage() {
+    let hash = location.hash,
+        result = hash.match(this.matcher);
+    return $.isArray(result) ? +result[1] : 0;
+  }
+
+  /**
    * 根据 active值 跳转到相应的页码并触发回掉函数
    * 
    * @param  {number} active 当前页码
    * @return {undefined}
    */
   handleRedirectTo(active, init) {
+    if (this.state.useHash) {
+      active = this.getHashPage(); 
+    }
+
+    this.state.useHash = false;
     active = this.active(active);
 
     if (active !== this.state.active || init) {
@@ -122,12 +141,39 @@ class ReactPaginator extends React.Component {
     }
   }
 
+  /**
+   * Set location hash.
+   * 
+   * @param {Number} active active page.
+   */
+  setQueryString(active) {
+    var hash = location.hash,
+        result = hash.match(this.matcher);
+
+    if (_.isArray(result)) {
+      hash = hash.replace(this.matcher, ($0, $1) => {
+        return `page=${active}`;
+      });
+    } else {
+      hash += `/page=${active}`;
+    }
+
+    location.hash = hash;
+  }
+
   componentWillMount() {
     this.handleRedirectTo(this.props.active, true);
   }
 
+  componentDidUpdate() {
+    if (this.props.useHash) {
+      this.setQueryString(this.state.active);
+    }
+  }
+
   componentWillReceiveProps(props) {
     this.props = props;
+    this.state.useHash = !!props.useHash;
     this.handleRedirectTo(this.props.active, true);
   }
 
@@ -142,17 +188,17 @@ class ReactPaginator extends React.Component {
       <div className={ classnames('react-paginator', 'react-paginator-default', className.container) }>
         <ul className={ this.props.visible ? 'pagination' : 'pager'}>
           { // 如果 page no 为 false，则不显示第一页 / 最后一页
-            visible ? <ReactPaginatorItem value={ language.first } disabled={ active === 1 } className={ className.first } callback={ this.handleRedirectTo.bind(this, 1) } /> : null
+            visible ? <ReactPagersItem value={ language.first } disabled={ active === 1 } className={ className.first } callback={ this.handleRedirectTo.bind(this, 1) } /> : null
           }
-          <ReactPaginatorItem value={ language.prev } callback={ this.handleRedirectTo.bind(this, active - 1) } className={ className.prev } disabled={ active === 1 } />
+          <ReactPagersItem value={ language.prev } callback={ this.handleRedirectTo.bind(this, active - 1) } className={ className.prev } disabled={ active === 1 } />
           { // 是否需要生成页码
             visible ? between.map((option, key) => {
-              return <ReactPaginatorItem key={ key } {...option} callback={ this.handleRedirectTo.bind(this) } />
+              return <ReactPagersItem key={ key } {...option} callback={ this.handleRedirectTo.bind(this) } />
             }) : null
           }
-          <ReactPaginatorItem value={ language.next } callback={ this.handleRedirectTo.bind(this, active + 1) } className={ className.next } disabled={ active === total } />
+          <ReactPagersItem value={ language.next } callback={ this.handleRedirectTo.bind(this, active + 1) } className={ className.next } disabled={ active === total } />
           {
-            visible ? <ReactPaginatorItem value={ language.last } disabled={ active === total } className={ className.last } callback={ this.handleRedirectTo.bind(this, total) } /> : null
+            visible ? <ReactPagersItem value={ language.last } disabled={ active === total } className={ className.last } callback={ this.handleRedirectTo.bind(this, total) } /> : null
           }
         </ul>
       </div>
@@ -160,10 +206,11 @@ class ReactPaginator extends React.Component {
   }
 }
 
-ReactPaginator.defaultProps = {
+ReactPagers.defaultProps = {
   total: 1,
   active: 1,
   number: 9,
+  useHash: true,
   visible: true,
   language: {
     last: "Last",
@@ -181,14 +228,15 @@ ReactPaginator.defaultProps = {
   }
 };
 
-ReactPaginator.propTypes = {
+ReactPagers.propTypes = {
   total: React.PropTypes.number,
   active: React.PropTypes.number,
   number: React.PropTypes.number,
+  useHash: React.PropTypes.bool,
   visible: React.PropTypes.bool,
   language: React.PropTypes.object,
   onChange: React.PropTypes.func,
   className: React.PropTypes.object
 };
 
-export default ReactPaginator;
+export default ReactPagers;

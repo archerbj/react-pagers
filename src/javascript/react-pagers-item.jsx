@@ -1,5 +1,6 @@
 /**
- * Link for ReactPaginator
+ * Link for ReactPagers
+ * 
  * @author artisan.
  * @Date(2015-11-16).
  */
@@ -8,11 +9,11 @@ import React from 'react';
 import _ from 'underscore';
 import classnames from 'classnames';
 
-class ReactPaginatorItem extends React.Component {
+class ReactPagersItem extends React.Component {
   constructor(props) {
     super(props);
 
-    this.displayName = 'ReactPaginatorItem';
+    this.displayName = 'ReactPagersItem';
   }
 
   handleClick() {
@@ -38,7 +39,7 @@ class ReactPaginatorItem extends React.Component {
   }
 }
 
-ReactPaginatorItem.defaultProps = {
+ReactPagersItem.defaultProps = {
   value : null,
   active: false,
   unique: null,
@@ -47,7 +48,7 @@ ReactPaginatorItem.defaultProps = {
   className: null
 };
 
-ReactPaginatorItem.propTypes = {
+ReactPagersItem.propTypes = {
   value : React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
@@ -62,4 +63,4 @@ ReactPaginatorItem.propTypes = {
   ])
 };
 
-export default ReactPaginatorItem;
+export default ReactPagersItem;
