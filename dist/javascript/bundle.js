@@ -104,16 +104,6 @@
 	          _react2['default'].createElement(
 	            'h3',
 	            null,
-	            '英文'
-	          ),
-	          _react2['default'].createElement(_reactPagersJsx2['default'], { onChange: this.handlePaginatorChange.bind(this) })
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'paginator-example' },
-	          _react2['default'].createElement(
-	            'h3',
-	            null,
 	            '中文'
 	          ),
 	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, language: {
@@ -121,25 +111,6 @@
 	              prev: '上一页',
 	              next: '下一页',
 	              first: "首页"
-	            }, onChange: this.handlePaginatorChange.bind(this) })
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'paginator-example' },
-	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, visible: false, language: {
-	              prev: '上一页',
-	              next: '下一页'
-	            }, onChange: this.handlePaginatorChange.bind(this) })
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'paginator-example' },
-	          _react2['default'].createElement(_reactPagersJsx2['default'], { active: 1, total: 30, visible: false, language: {
-	              prev: '上一页',
-	              next: '下一页'
-	            }, className: {
-	              prev: 'previous',
-	              next: 'next'
 	            }, onChange: this.handlePaginatorChange.bind(this) })
 	        )
 	      );
@@ -29028,6 +28999,8 @@
 	    this.matcher = /page\=([0-9]+)/;
 
 	    this.displayName = 'ReactPagers';
+
+	    this.handleHashChange = this.handleHashChange.bind(this);
 	  }
 
 	  /**
@@ -29093,8 +29066,8 @@
 	     * @return {undefined}
 	     */
 	  }, {
-	    key: 'handChange',
-	    value: function handChange() {
+	    key: 'handleChange',
+	    value: function handleChange() {
 	      var onChange = this.props.onChange;
 
 	      if (_underscore2['default'].isFunction(onChange)) {
@@ -29138,12 +29111,12 @@
 	          between = this.filler(active);
 	        }
 
-	        var handChange = init ? null : this.handChange;
+	        var handleChange = init ? null : this.handleChange;
 
 	        this.setState({
 	          active: active,
 	          between: between
-	        }, handChange);
+	        }, handleChange);
 	      }
 	    }
 
@@ -29166,7 +29139,16 @@
 	        hash += '/page=' + active;
 	      }
 
-	      location.hash = hash;
+	      window.location.hash = hash;
+	    }
+	  }, {
+	    key: 'handleHashChange',
+	    value: function handleHashChange(event) {
+	      var active = this.getHashPage();
+	      this.handleRedirectTo(active);
+
+	      // Prevent default event.
+	      event.preventDefault();
 	    }
 	  }, {
 	    key: 'componentWillMount',
@@ -29174,11 +29156,23 @@
 	      this.handleRedirectTo(this.props.active, true);
 	    }
 	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (this.props.useHash) {
+	        (0, _jquery2['default'])(window).on('hashchange', this.handleHashChange);
+	      }
+	    }
+	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
 	      if (this.props.useHash) {
 	        this.setQueryString(this.state.active);
 	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      (0, _jquery2['default'])(window).off('hashchange', this.handleHashChange);
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',

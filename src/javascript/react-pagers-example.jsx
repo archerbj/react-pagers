@@ -21,10 +21,7 @@ class ReactPaginatorExample extends React.Component {
   render() {
     return (
       <div className="paginator-example-container container">
-        <div className="paginator-example">
-          <h3>英文</h3>
-          <ReactPaginator onChange={ this.handlePaginatorChange.bind(this) } />
-        </div>
+        
 
         <div className="paginator-example">
           <h3>中文</h3>
@@ -36,22 +33,7 @@ class ReactPaginatorExample extends React.Component {
           }} onChange={ this.handlePaginatorChange.bind(this) } />
         </div>
 
-        <div className="paginator-example">
-          <ReactPaginator active={1} total={30} visible={false} language={{
-            prev: '上一页',
-            next: '下一页'
-          }} onChange={ this.handlePaginatorChange.bind(this) } />
-        </div>
-
-        <div className="paginator-example">
-          <ReactPaginator active={1} total={30} visible={false} language={{
-            prev: '上一页',
-            next: '下一页'
-          }} className={{
-            prev: 'previous',
-            next: 'next'
-          }} onChange={ this.handlePaginatorChange.bind(this) } />
-        </div>
+        
       </div>
     );
   }

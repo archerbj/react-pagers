@@ -32,6 +32,8 @@ class ReactPagers extends React.Component {
     this.matcher = /page\=([0-9]+)/;
 
     this.displayName = 'ReactPagers';
+
+    this.handleHashChange = this.handleHashChange.bind(this);
   }
 
   /**
@@ -92,7 +94,7 @@ class ReactPagers extends React.Component {
    * 
    * @return {undefined}
    */
-  handChange() {
+  handleChange() {
     let { onChange } = this.props;
 
     if (_.isFunction(onChange)) {
@@ -132,12 +134,12 @@ class ReactPagers extends React.Component {
         between = this.filler(active);
       }
 
-      let handChange = init ? null : this.handChange;
+      let handleChange = init ? null : this.handleChange;
 
       this.setState({
         active : active,
         between: between
-      }, handChange);
+      }, handleChange);
     }
   }
 
@@ -158,17 +160,35 @@ class ReactPagers extends React.Component {
       hash += `/page=${active}`;
     }
 
-    location.hash = hash;
+    window.location.hash = hash;
+  }
+
+  handleHashChange(event) {
+    let active = this.getHashPage();
+    this.handleRedirectTo(active);
+
+    // Prevent default event.
+    event.preventDefault();
   }
 
   componentWillMount() {
     this.handleRedirectTo(this.props.active, true);
   }
 
+  componentDidMount() {
+    if (this.props.useHash) {
+      $(window).on('hashchange', this.handleHashChange);
+    }
+  }
+
   componentDidUpdate() {
     if (this.props.useHash) {
       this.setQueryString(this.state.active);
     }
+  }
+
+  componentWillUnmount() {
+    $(window).off('hashchange', this.handleHashChange);
   }
 
   componentWillReceiveProps(props) {
