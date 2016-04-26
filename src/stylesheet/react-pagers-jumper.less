@@ -1,0 +1,39 @@
+@import 'variables';
+@import 'mixins';
+
+.pagers-jumper {
+  color: #777 !important;
+  background: none;
+  &:hover {
+    background: none !important;
+  }
+
+  .form-control {
+    box-sizing: border-box;
+    width: 50px;
+    height: 20px;
+    margin: 0 5px;
+    text-align: center;
+    display: inline;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: @border-radius-base;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    outline: 0;
+    vertical-align: top;
+  }
+}
+
+.pagination-lg .pagers-jumper .form-control {
+  height: 24px;
+}
+
+.pagination-sm .pagers-jumper .form-control {
+  height: 18px;
+}
