@@ -17,7 +17,7 @@ gulp.task('zip', function () {
 
 // Compile less file.
 gulp.task('less', function () {
-  gulp.src('./src/stylesheet/**/'+ package.name +'.less')
+  gulp.src('./src/**/'+ package.name +'.less')
     .pipe(less())
     .pipe(rename(function (path) {
       path.extname = '.css';
@@ -28,7 +28,7 @@ gulp.task('less', function () {
 
 // Compile jsx/es6 file.
 gulp.task('webpack', function () {
-  gulp.src(['./src/javascript/**.jsx', './src/javascript/**.es6'])
+  gulp.src(['./src/**/**.jsx', './src/**/**.es6'])
     .pipe(webpack(configures))
     .pipe(rename(function (path) {
       path.dirname = 'javascript';
@@ -38,12 +38,12 @@ gulp.task('webpack', function () {
 
 // Watch less file.
 gulp.task('watch:less', function () {
-  gulp.watch('./src/stylesheet/**.less', ['less']);
+  gulp.watch('./src/**/**.less', ['less']);
 });
 
 // Watch jsx/es6 file.
 gulp.task('watch:jsx', function () {
-  gulp.watch(['./src/javascript/**.jsx', './src/javascript/**.es6'], ['webpack']);
+  gulp.watch(['./src/**/**.jsx', './src/**/**.es6'], ['webpack']);
 });
 
 // Run server.

@@ -25,6 +25,7 @@ import ReactPagers from 'ReactPagers';
 | `language` | object | ` language: { last: 'Last', prev: '«', next: '»', first: 'First' }` | 本地化 |
 | `onChange` | function | null | 改变页码时的回调函数 |
 | `className` | object | `className: { prev: null, next: null, last: null, first: null, container: null }` | 样式自定义 |
+| `jumper` | boolean | false | 是否显示跳转输入框 |
 
 > 如果开启了useHash，每次的翻页都会在hash中记载，如需实现页面内容根据hash中page字段，需手动获取page字段并传入，如：
 
@@ -41,6 +42,9 @@ if ($.isArray(result)) {
 ```
 
 ## 更新日志
+- v2.0.0
+  + 新增功能：`jumper` 是否显示跳转输入框
+
 - v1.0.2
   + 新增功能：useHash
 

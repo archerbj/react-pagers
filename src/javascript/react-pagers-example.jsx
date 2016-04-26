@@ -7,10 +7,6 @@ class ReactPaginatorExample extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: true
-    };
-
     this.displayName = 'ReactPaginatorExample';
   }
 
@@ -34,6 +30,50 @@ class ReactPaginatorExample extends React.Component {
             next: '下一页',
             first: "首页"
           }} onChange={ this.handlePaginatorChange.bind(this) } />
+        </div>
+
+        <div className="paginator-example">
+          <h3>含有跳转输入框的分页器</h3>
+          <ReactPaginator active={1} total={30} language={{
+            last: "末页",
+            prev: '上一页',
+            next: '下一页',
+            first: "首页"
+          }} onChange={ this.handlePaginatorChange.bind(this) }
+          jumper={ true } />
+        </div>
+
+        <div className="paginator-example">
+          <h3>大尺寸</h3>
+          <ReactPaginator active={1} total={30} language={{
+            last: "末页",
+            prev: '上一页',
+            next: '下一页',
+            first: "首页"
+          }} onChange={ this.handlePaginatorChange.bind(this) }
+          jumper={ true } size={ 'lg' } />
+        </div>
+
+        <div className="paginator-example">
+          <h3>默认</h3>
+          <ReactPaginator active={1} total={30} language={{
+            last: "末页",
+            prev: '上一页',
+            next: '下一页',
+            first: "首页"
+          }} onChange={ this.handlePaginatorChange.bind(this) }
+          jumper={ true } />
+        </div>
+
+        <div className="paginator-example">
+          <h3>小尺寸</h3>
+          <ReactPaginator active={1} total={30} language={{
+            last: "末页",
+            prev: '上一页',
+            next: '下一页',
+            first: "首页"
+          }} onChange={ this.handlePaginatorChange.bind(this) }
+          jumper={ true } size={ 'sm' } />
         </div>
 
         <div className="paginator-example">

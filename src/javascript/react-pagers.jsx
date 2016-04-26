@@ -1,7 +1,7 @@
 /**
  * Paginator for React.JS
  * 
- * @github https://github.com/code-artisan/ReactPagers
+ * @github https://github.com/code-artisan/react-pagers
  * @author artisan.
  * @Date(2015-11-16).
  */
@@ -11,6 +11,7 @@ import React from 'react';
 import _ from 'underscore';
 import classnames from 'classnames';
 import ReactPagersItem from './react-pagers-item.jsx';
+import ReactPagersJumper from './react-pagers-jumper.jsx';
 
 class ReactPagers extends React.Component {
 
@@ -157,7 +158,7 @@ class ReactPagers extends React.Component {
         return `page=${active}`;
       });
     } else {
-      hash += `/page=${active}`;
+      hash += /\/$/.test(hash) ? `page=${active}` : `/page=${active}`;
     }
 
     window.location.hash = hash;
@@ -200,13 +201,17 @@ class ReactPagers extends React.Component {
   render() {
     let { active, between } = this.state,
         {
-          total, className,
-          language, visible
+          size,
+          total,
+          className,
+          language,
+          visible,
+          jumper
         } = this.props;
 
     return (
-      <div className={ classnames('react-paginator', 'react-paginator-default', className.container) }>
-        <ul className={ this.props.visible ? 'pagination' : 'pager'}>
+      <div className={ classnames('react-paginator', className.container) }>
+        <ul className={ this.props.visible ? `pagination pagination-${size}` : 'pager'}>
           { // 如果 page no 为 false，则不显示第一页 / 最后一页
             visible ? <ReactPagersItem value={ language.first } disabled={ active === 1 } className={ className.first } callback={ this.handleRedirectTo.bind(this, 1) } /> : null
           }
@@ -219,6 +224,9 @@ class ReactPagers extends React.Component {
           <ReactPagersItem value={ language.next } callback={ this.handleRedirectTo.bind(this, active + 1) } className={ className.next } disabled={ active === total } />
           {
             visible ? <ReactPagersItem value={ language.last } disabled={ active === total } className={ className.last } callback={ this.handleRedirectTo.bind(this, total) } /> : null
+          }
+          {
+            visible && jumper ? <ReactPagersJumper size={ size } value={ active } onChange={ this.handleRedirectTo.bind(this) } /> : null
           }
         </ul>
       </div>
@@ -234,8 +242,8 @@ ReactPagers.defaultProps = {
   visible: true,
   language: {
     last: "Last",
-    prev: '«',
-    next: '»',
+    prev: 'Previous',
+    next: 'Next',
     first: "First"
   },
   onChange: null,
@@ -245,18 +253,24 @@ ReactPagers.defaultProps = {
     last: null,
     first: null,
     container: null
-  }
+  },
+  jumper: false,
+  size: 'md'
 };
 
 ReactPagers.propTypes = {
-  total: React.PropTypes.number,
-  active: React.PropTypes.number,
+  total: React.PropTypes.number.isRequired,
+  active: React.PropTypes.number.isRequired,
   number: React.PropTypes.number,
   useHash: React.PropTypes.bool,
   visible: React.PropTypes.bool,
   language: React.PropTypes.object,
   onChange: React.PropTypes.func,
-  className: React.PropTypes.object
+  className: React.PropTypes.object,
+  jumper: React.PropTypes.bool,
+  size: React.PropTypes.oneOf([
+    'sm', 'md', 'lg'
+  ])
 };
 
 export default ReactPagers;
