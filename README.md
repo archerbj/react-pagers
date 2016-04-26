@@ -44,6 +44,7 @@ if ($.isArray(result)) {
 ## 更新日志
 - v2.0.0
   + 新增功能：`jumper` 是否显示跳转输入框
+  + 新增功能：`size` 定义分页尺寸
 
 - v1.0.2
   + 新增功能：useHash
