@@ -17,7 +17,7 @@ gulp.task('zip', function () {
 
 // Compile less file.
 gulp.task('less', function () {
-  gulp.src('./src/**/'+ package.name +'.less')
+  gulp.src('./src/**/react-*.less')
     .pipe(less())
     .pipe(rename(function (path) {
       path.extname = '.css';
