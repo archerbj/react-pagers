@@ -1,0 +1,11 @@
+.paginator-example-container {
+  width: 1170px;
+  margin: 0 auto;
+}
+.paginator-example-container a {
+  color: #337ab7;
+  text-decoration: none;
+}
+.paginator-example-container a:hover {
+  text-decoration: none;
+}

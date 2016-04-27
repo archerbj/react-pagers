@@ -16,7 +16,7 @@ class ReactPaginatorExample extends React.Component {
 
   render() {
     return (
-      <div className="paginator-example-container container">
+      <div className="paginator-example-container">
         <div className="paginator-example">
           <h3>英文</h3>
           <ReactPaginator onChange={ this.handlePaginatorChange.bind(this) } />

@@ -11,14 +11,13 @@
 .pagination > li > span {
   position: relative;
   float: left;
-  color: #337ab7;
   padding: 6px 12px;
   line-height: 1.42857143;
   text-decoration: none;
+  color: #337ab7;
   background-color: #fff;
   border: 1px solid #ddd;
   margin-left: -1px;
-  font-size: 14px;
 }
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
@@ -31,20 +30,70 @@
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: #23527c;
+  background-color: #eee;
+  border-color: #ddd;
+}
 .pagination > .active > a,
-.pagination > .active > span {
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 3;
   color: #fff;
   background-color: #337ab7;
   border-color: #337ab7;
   cursor: default;
 }
 .pagination > .disabled > span,
-.pagination > .disabled > a {
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
   color: #777;
   background-color: #fff;
   border-color: #ddd;
-  cursor: not-allowed;
+  cursor: no-allowed;
   pointer-events: none;
+}
+.pagination-lg > li > a,
+.pagination-lg > li > span {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+}
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.pagination-sm > li > a,
+.pagination-sm > li > span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .pagination .pagers-jumper {
   color: #777 !important;
@@ -72,14 +121,6 @@
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   outline: 0;
   vertical-align: top;
-}
-.pagination.disabled > li > span,
-.pagination.disabled > li > a {
-  color: #777;
-  background-color: #fff;
-  border-color: #ddd;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 .pagination-lg .pagers-jumper .form-control {
   height: 24px;

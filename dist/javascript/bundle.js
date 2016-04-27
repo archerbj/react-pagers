@@ -93,7 +93,7 @@
 	    value: function render() {
 	      return _react2['default'].createElement(
 	        'div',
-	        { className: 'paginator-example-container container' },
+	        { className: 'paginator-example-container' },
 	        _react2['default'].createElement(
 	          'div',
 	          { className: 'paginator-example' },

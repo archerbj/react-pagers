@@ -5,6 +5,15 @@ Paginator for React.JS
 ```bash
 $ npm install react-pagers --save
 ```
+请根据自己的需要导入相应的样式，样式代码源自于 `bootstrap` 框架。
+
+```js
+require('react-pagers/dist/stylesheet/react-pagers-pagination.css');
+
+// or
+
+require('react-pagers/dist/stylesheet/react-pagers-pager.css');
+```
 
 ## 使用
 ```js
@@ -42,17 +51,17 @@ if ($.isArray(result)) {
 ```
 
 ## 更新日志
+- v2.0.1
+  + 样式整理
+
 - v2.0.0
   + 新增功能：`jumper` 是否显示跳转输入框
-  + 新增功能：`size` 定义分页尺寸
 
 - v1.0.2
   + 新增功能：useHash
 
-
 - v1.0.1
   + 逻辑错误
-
 
 - v1.0.0
   + 基本功能
